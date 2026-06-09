@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>單字卡練習</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>單字卡練習</h1>
+    <nav>
+      <button id="btn-main">練習</button>
+      <button id="btn-manage">管理</button>
+    </nav>
+  </header>
+
+  <main id="view-container">
+    <section id="main-view" class="view">
+      <div class="controls">
+        <button id="prev">上一個</button>
+        <button id="next">下一個</button>
+      </div>
+
+      <div id="card" class="card" tabindex="0">
+        <div class="card-inner">
+          <div class="card-face card-front">
+            <div id="word-large">Hello</div>
+          </div>
+          <div class="card-face card-back">
+            <div class="word-info">
+              <div><strong>中文：</strong><span id="chinese">哈囉</span></div>
+              <div><strong>詞性：</strong><span id="pos">interjection</span></div>
+              <div><strong>例句：</strong><div id="example">Hello, how are you?</div></div>
+              <div><strong>字根分析：</strong><div id="root">—</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="manage-view" class="view hidden">
+      <h2>單字管理</h2>
+      <form id="word-form">
+        <label>英文單字<input type="text" id="f-word" required></label>
+        <label>中文翻譯<input type="text" id="f-chinese"></label>
+        <label>詞性<input type="text" id="f-pos"></label>
+        <label>例句<textarea id="f-example"></textarea></label>
+        <label>字根分析<textarea id="f-root"></textarea></label>
+        <div class="form-actions">
+          <button type="button" id="auto-fill">自動填入</button>
+          <button type="submit">儲存單字</button>
+        </div>
+      </form>
+
+      <h3>已存單字</h3>
+      <ul id="word-list"></ul>
+    </section>
+  </main>
+
+  <footer>
+    <small>純前端示範，資料儲存在 localStorage。本例使用公開 API 嘗試自動填入。</small>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
