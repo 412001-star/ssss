@@ -18,8 +18,7 @@ const mainView = document.getElementById('main-view')
 const manageView = document.getElementById('manage-view')
 
 // 後端 Google Apps Script Web App URL
-const GAS_ENDPOINT = 'https://script.google.com/macros/s/REPLACE_WITH_DEPLOYMENT_ID/exec'
-
+const GAS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxKTn5vSd7KC2-gihys5J4A30ithECZEUQ7sduVGk2ApIkpeq154mcJ5GOypTsatZMnOQ/exec
 // 管理表單
 const form = document.getElementById('word-form')
 const fWord = document.getElementById('f-word')
