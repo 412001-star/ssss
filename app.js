@@ -17,6 +17,9 @@ const btnManage = document.getElementById('btn-manage')
 const mainView = document.getElementById('main-view')
 const manageView = document.getElementById('manage-view')
 
+// 後端 Google Apps Script Web App URL
+const GAS_ENDPOINT = 'https://script.google.com/macros/s/REPLACE_WITH_DEPLOYMENT_ID/exec'
+
 // 管理表單
 const form = document.getElementById('word-form')
 const fWord = document.getElementById('f-word')
@@ -79,7 +82,26 @@ nextBtn.addEventListener('click',()=>{currentIndex=(currentIndex+1)%words.length
 btnManage.addEventListener('click',()=>{mainView.classList.add('hidden');manageView.classList.remove('hidden');renderList()})
 btnMain.addEventListener('click',()=>{manageView.classList.add('hidden');mainView.classList.remove('hidden')})
 
-form.addEventListener('submit',(e)=>{
+async function sendWordToBackend(wordItem){
+  if(!GAS_ENDPOINT || GAS_ENDPOINT.includes('REPLACE_WITH_DEPLOYMENT_ID')){
+    throw new Error('請先設定 GAS_ENDPOINT 為您的 Google Apps Script Web App URL')
+  }
+
+  const res = await fetch(GAS_ENDPOINT, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(wordItem)
+  })
+
+  if(!res.ok){
+    const text = await res.text()
+    throw new Error(`後端回傳錯誤：${res.status} ${res.statusText} ${text}`)
+  }
+
+  return await res.json().catch(()=>null)
+}
+
+form.addEventListener('submit', async (e)=>{
   e.preventDefault()
   const item = {
     word: fWord.value.trim(),
@@ -89,8 +111,18 @@ form.addEventListener('submit',(e)=>{
     root: fRoot.value.trim()
   }
   if(!item.word) return alert('請輸入英文單字')
-  words.push(item)
-  saveWords();renderList();form.reset();alert('已儲存')
+
+  try{
+    await sendWordToBackend(item)
+    words.push(item)
+    saveWords();renderList();form.reset();
+    alert('已儲存並送出後端')
+  }catch(err){
+    console.error('後端提交失敗', err)
+    words.push(item)
+    saveWords();renderList();
+    alert('已儲存到本機，但後端提交失敗，請查看控制台')
+  }
 })
 
 // 自動填入功能：呼叫 dictionaryapi.dev 與 MyMemory 翻譯
